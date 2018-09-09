@@ -12,6 +12,22 @@ $(document).ready(function () {
     $('#toslink').attr('href', config.other.tosUrl);
     $('#privacypolicylink').attr('href', config.other.privacyPolicyUrl);
 
+    // Smooth scrolling using jQuery easing - see template in readme credits for more info
+    /*
+    $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            if (target.length) {
+                $('html, body').animate({
+                    scrollTop: (target.offset().top - 48)
+                }, 1000, "easeInOutExpo");
+                return false;
+            }
+        }
+    });
+    */
+
     // Closes responsive menu when a scroll trigger link is clicked
     $('.js-scroll-trigger').click(function () {
         $('.navbar-collapse').collapse('hide');
@@ -37,3 +53,25 @@ $(document).ready(function () {
     $(window).scroll(navbarCollapse);
 
 });
+
+//optional use of viewjs:
+/*
+var Vue = require("vue/dist/vue.js");
+window.Vue = Vue;
+
+Vue.component("testcomponent",{
+    template:'<p>I am Test Component</p>'
+});
+
+Vue.component('headercomponent', {
+    template:'<p>I am HEADER Component</p>'
+});
+
+Vue.component('footercomponent', {
+    template:'<p>I am FOOTER Component</p>'
+});
+
+var app = new Vue({
+    el: '#header-footer'
+});
+*/

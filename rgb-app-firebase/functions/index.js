@@ -15,6 +15,43 @@ var daysofinactivity = parseInt(config.other.daysofinactivity);
 
 var secretKey = config.other.secretKey;
 
+exports.getrgbsettings = functions.https.onCall((data, context) => {
+    const key = data.key;
+    const rgbid = data.rgbid;
+    // Exit if the keys don't match.
+    if (!secureCompare(key, functions.config().cron.key)) {
+        console.log('The key provided in the request does not match the key set in the environment. Check that', key,
+            'matches the cron.key attribute in `firebase env:get`');
+        res.status(403).send('Security key does not match. Make sure your "key" URL query parameter matches the ' +
+            'cron.key environment variable.');
+            return {
+                status: "auth failed",
+                data: null
+            };
+    } else {
+        console.log("key correct");
+        var db = admin.database();
+        console.log("got admin database");
+        return db.ref('rgb/' + rgbid).once('value').then(rgb => {
+            //var rgbkey = rgb.key;
+            var rgbVal = rgb.val();
+            console.log(rgbVal);
+            console.log("got rgb data");
+            return {
+                status: "success",
+                data: rgbVal
+            };
+        }).catch((errorObject) => {
+            console.log("The function failed: " + errorObject.code);
+            console.log("could not get rgb data");
+            return {
+                status: "failed",
+                data: null
+            };
+        });
+    }
+});
+
 //see https://github.com/firebase/functions-samples/tree/master/delete-unused-accounts-cron for more details
 exports.accountcleanup = functions.https.onRequest((req, res) => {
     //console.log("cleaning up users");

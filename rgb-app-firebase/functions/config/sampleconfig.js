@@ -1,5 +1,4 @@
 var config = {
-
     "firebaseadmin": {
         "type": "service_account",
         "project_id": "app",

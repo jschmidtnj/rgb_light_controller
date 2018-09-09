@@ -41,6 +41,69 @@ $(document).ready(function () {
     $('#toslink').attr('href', config.other.tosUrl);
     $('#privacypolicylink').attr('href', config.other.privacyPolicyUrl);
 
+    function togglePower() {
+        if (window.powerMode == 0) {
+            //turn power on
+            firebase.database().ref('rgb/' + config.other.rgbid).update({
+                "power": 1
+            }).catch(function(err) {
+                handleError(err);
+            }).then(function() {
+                window.powerMode = 1;
+                $("#powerToggle").html("On");
+                $('#modeSelect').selectpicker();
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+                    $('#modeSelect').selectpicker('mobile');
+                }
+                $('.selectpicker').selectpicker();
+                //console.log("location select: " + locationSelectString);
+                $('.modeSelect').on("change", function (elem) {
+                    var modeSelect = elem.target.value;
+                    var modeSelectInt = parseInt(modeSelect);
+                    firebase.database().ref('rgb/' + config.other.rgbid).update({
+                        "mode": modeSelectInt
+                    }).catch(function(err) {
+                        handleError(err);
+                    }).then(function() {
+                        console.log("mode updated");
+                    });
+                });
+                $("#modeSelectCollapse").removeClass("collapse");
+            });
+        } else {
+            //turn power off
+            firebase.database().ref('rgb/' + config.other.rgbid).update({
+                "power": 0
+            }).catch(function(err) {
+                handleError(err);
+            }).then(function() {
+                window.powerMode = 0;
+                $("#powerToggle").html("Off");
+                $("#modeSelectCollapse").addClass("collapse");
+            });
+        }
+    }
+
+    function getInitialValues() {
+        firebase.database().ref('rgb/' + config.other.rgbid).once('value').then(function(rgb) {
+            var rgbVal = rgb.val();
+            var rgbMode = rgbVal.mode;
+            var rgbPower = rgbVal.power;
+            if (rgbPower == 0) {
+                window.powerMode = 1;
+            } else {
+                window.powerMode = 0;
+            }
+            togglePower();
+            $("#powerToggle").on('click touchstart', function () {
+                togglePower();
+            });
+            $("#powerButtonCollapse").removeClass("collapse");
+        }).catch(function(err) {
+            handleError(err);
+        });
+    }
+
     var signed_in_initially = false;
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
@@ -49,6 +112,7 @@ $(document).ready(function () {
             window.email = user.email;
             $("#bodycollapse").removeClass("collapse");
             signed_in_initially = true;
+            getInitialValues();
         } else {
             // No user is signed in. redirect to login page:
             if (signed_in_initially) {

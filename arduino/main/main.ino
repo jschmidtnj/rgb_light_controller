@@ -65,6 +65,8 @@ void loop()
     int newmode = checkForNewMode();
     if (oldmode != newmode) {
       setMode(newmode);
+    } else if (newmode == 9) {
+      setMode(9);
     }
   } else {
 
@@ -163,22 +165,22 @@ void setMode(int data) {
       analogWrite(REDPIN, r);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    int newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
     // fade from violet to red
     for (b = 255; b > 0; b--) {
       analogWrite(BLUEPIN, b);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
     Serial.println("fade");
     // fade from red to yellow
@@ -186,44 +188,44 @@ void setMode(int data) {
       analogWrite(GREENPIN, g);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
     // fade from yellow to green
     for (r = 255; r > 0; r--) {
       analogWrite(REDPIN, r);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
     // fade from green to teal
     for (b = 0; b < 256; b++) {
       analogWrite(BLUEPIN, b);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
     // fade from teal to blue
     for (g = 255; g > 0; g--) {
       analogWrite(GREENPIN, g);
       delay(FADESPEED);
       Serial.println("fade");
-      int newmode = checkForNewMode();
-      if (newmode != 9) {
-        setMode(newmode);
-        return;
-      }
+    }
+    newmode = checkForNewMode();
+    if (newmode != 9) {
+      setMode(newmode);
+      return;
     }
   }
 }
